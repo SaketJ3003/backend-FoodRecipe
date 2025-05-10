@@ -4,12 +4,14 @@ const cors = require('cors');
 const fs = require('fs');
 const axios = require('axios');
 require('dotenv').config();
+
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
 
 app.use(cors());
 app.use(express.json());
+
 // API endpoint to accept uploaded image
 app.post('/api/recipe', upload.single('image'), async (req, res) => {
     console.log('Image received:', req.file?.originalname);
