@@ -4,7 +4,6 @@ const cors = require('cors');
 const fs = require('fs');
 const axios = require('axios');
 require('dotenv').config();
-const PORT = process.env.PORT || 5000;
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
