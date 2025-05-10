@@ -10,9 +10,6 @@ const upload = multer({ dest: 'uploads/' });
 
 app.use(cors());
 app.use(express.json());
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 // API endpoint to accept uploaded image
 app.post('/api/recipe', upload.single('image'), async (req, res) => {
     console.log('Image received:', req.file?.originalname);
