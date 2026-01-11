@@ -23,7 +23,10 @@ app.post('/api/recipe', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No image uploaded' });
     }
 
-    // ✅ Convert image buffer directly to base64
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({ error: 'GEMINI_API_KEY missing' });
+    }
+
     const base64Image = req.file.buffer.toString('base64');
 
     const geminiRes = await axios.post(
@@ -32,37 +35,10 @@ app.post('/api/recipe', upload.single('image'), async (req, res) => {
         contents: [
           {
             parts: [
-              { text: 'Generate a recipe from this food image. Include ingredients and preparation steps:' },
+              { text: 'Generate a recipe from this food image with ingredients and steps.' },
               {
                 inlineData: {
-                  mimeType: req.file.mimetype,
-                  data: base64Image,
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        params: {
-          key: process.env.GEMINI_API_KEY,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
 
-    const recipeText =
-      geminiRes.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    res.json({ recipe: recipeText });
-
-  } catch (err) {
-    console.error(err.response?.data || err.message);
-    res.status(500).json({ error: 'Failed to generate recipe' });
-  }
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
