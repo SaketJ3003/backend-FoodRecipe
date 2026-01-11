@@ -27,7 +27,7 @@ app.post('/api/recipe', upload.single('image'), async (req, res) => {
     const base64Image = req.file.buffer.toString('base64');
 
     const geminiRes = await axios.post(
-      'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
       {
         contents: [
           {
